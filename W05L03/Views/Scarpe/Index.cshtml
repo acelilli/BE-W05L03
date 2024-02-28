@@ -1,0 +1,23 @@
+﻿@model W05L03.Models.Scarpe
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        @foreach (var scarpa in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="@scarpa.ImmagineCopertina" alt="@scarpa.NomeProdotto">
+                    <div class="card-body">
+                        <h5 class="card-title">@scarpa.NomeProdotto</h5>
+                        <p class="card-text">Prezzo: @scarpa.Prezzo</p>
+                        <p class="card-text">@scarpa.DescrizioneDettagliata</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
