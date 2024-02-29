@@ -18,6 +18,7 @@
                         <h5 class="card-title">@scarpa.NomeProdotto</h5>
                         <p class="card-text">Prezzo: @scarpa.Prezzo</p>
                         <a href="@Url.Action("Dettagli", "Home", new { id = scarpa.IdProdotto })" class="btn btn-info">Dettagli</a>
+                        <a href="@Url.Action("EditScarpe", "Scarpe", new { id = scarpa.IdProdotto })" class="btn btn-info">Modifica</a>
                     </div>
                 </div>
             </div>

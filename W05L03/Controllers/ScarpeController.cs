@@ -52,6 +52,9 @@ namespace W05L03.Controllers
 
             return View(scarpeList);
         }
+        /////////////////////////////////////////
+        //METODI PER LA CREAZIONE DELLE SCARPE
+        ////////////////////////////////////////
 
         // GET: Scarpe/Create
         public ActionResult CreateScarpe()
@@ -103,7 +106,7 @@ namespace W05L03.Controllers
             return View("CreateScarpe");
         }
 
-        // Metodo per salvare un'immagine sul server e restituire il percorso del file
+        // Metodo per salvare un'immagine sul server e restituire il percorso del file per non riscriverlo 3 volte
         private string SaveImage(HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
@@ -115,5 +118,87 @@ namespace W05L03.Controllers
             }
             return null;
         }
+        /////////////////////////////////////////
+        //METODI PER L'EDIT DELLE SCARPE
+        ////////////////////////////////////////
+        // GET
+        public ActionResult EditScarpe(int id)
+        {
+            Scarpe scarpa = null;
+            string connectionString = ConfigurationManager.ConnectionStrings["ScarpeCo"].ConnectionString.ToString();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Scarpe WHERE IdProdotto = @IdProdotto";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdProdotto", id);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    scarpa = new Scarpe()
+                    {
+                        IdProdotto = (int)reader["IdProdotto"],
+                        NomeProdotto = reader["NomeProdotto"].ToString(),
+                        Prezzo = Convert.ToDecimal(reader["Prezzo"]),
+                        DescrizioneDettagliata = reader["DescrizioneDettagliata"].ToString(),
+                        ImmagineCopertina = reader["ImmagineCopertina"].ToString(),
+                        AltreImg1 = reader["AltreImg1"].ToString(),
+                        AltreImg2 = reader["AltreImg2"].ToString(),
+                        Disponibile = Convert.ToBoolean(reader["Disponibile"])
+                    };
+                }
+
+                reader.Close();
+            }
+
+            if (scarpa == null)
+            {
+                return HttpNotFound(); // Restituisci 404 se la scarpa non è trovata
+            }
+
+            return View(scarpa);
+        }
+
+        // POST
+        [HttpPost]
+        public ActionResult EditScarpe(int id, Scarpe scarpa)
+        {
+            if (ModelState.IsValid)
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["ScarpeCo"].ConnectionString.ToString();
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = "UPDATE Scarpe SET NomeProdotto = @NomeProdotto, Prezzo = @Prezzo, DescrizioneDettagliata = @DescrizioneDettagliata, ImmagineCopertina = @ImmagineCopertina, AltreImg1 = @AltreImg1, AltreImg2 = @AltreImg2, Disponibile = @Disponibile WHERE IdProdotto = @IdProdotto";
+
+                    SqlCommand cmd = new SqlCommand(sqlQuery, conn);
+                    cmd.Parameters.AddWithValue("@IdProdotto", scarpa.IdProdotto);
+                    cmd.Parameters.AddWithValue("@NomeProdotto", scarpa.NomeProdotto);
+                    cmd.Parameters.AddWithValue("@Prezzo", scarpa.Prezzo);
+                    cmd.Parameters.AddWithValue("@DescrizioneDettagliata", scarpa.DescrizioneDettagliata);
+                    cmd.Parameters.AddWithValue("@ImmagineCopertina", scarpa.ImmagineCopertina);
+                    cmd.Parameters.AddWithValue("@AltreImg1", scarpa.AltreImg1);
+                    cmd.Parameters.AddWithValue("@AltreImg2", scarpa.AltreImg2);
+                    cmd.Parameters.AddWithValue("@Disponibile", scarpa.Disponibile);
+
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Si è verificato un errore durante l'aggiornamento delle scarpe: " + ex.Message);
+                    }
+                }
+            }
+            return View(scarpa);
+        }
+
+
     }
 }
