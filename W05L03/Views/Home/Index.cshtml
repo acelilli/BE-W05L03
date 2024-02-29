@@ -1,33 +1,26 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model List<W05L03.Models.Scarpe>
+
+@{
+    ViewBag.Title = "Index";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
 
+<div class="container">
     <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+        @foreach (var scarpa in Model)
+        {
+            <div class="col-sm-4 my-2">
+                <div class="card shadow text-white">
+                    <div style="width: 100%; max-width: 450px; overflow: hidden;" class="card-img-container">
+                        <img class="card-img-top w-100" src="@Url.Content(scarpa.ImmagineCopertina)" alt="Immagine di copertina per @scarpa.NomeProdotto" />
+                    </div>
+                    <div class="card-body bg-dark">
+                        <h5 class="card-title">@scarpa.NomeProdotto</h5>
+                        <p class="card-text">Prezzo: @scarpa.Prezzo</p>
+                        <a href="@Url.Action("Dettagli", "Home", new { id = scarpa.IdProdotto })" class="btn btn-info fw-bold">Dettagli</a>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</main>
+</div>

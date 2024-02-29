@@ -19,12 +19,15 @@ namespace W05L03.Models
 
         [Display(Name = "Altre immagini:")]
         public string AltreImg1 { get; set; }
+
         [Display(Name = "Altre immagini:")]
         public string AltreImg2 { get; set; }
 
-        public Scarpe() { }
-        // è qui che non mi serve id perchè generato automaticamente
-        public Scarpe(string nomeprodotto, decimal prezzo, string dd, string mainimg, string img1, string img2)
+        public bool Disponibile { get; set; }
+
+       public Scarpe() { }
+
+      public Scarpe(string nomeprodotto, decimal prezzo, string dd, string mainimg, string img1, string img2, bool disponibile)
         {
             NomeProdotto = nomeprodotto;
             Prezzo = prezzo;
@@ -32,6 +35,7 @@ namespace W05L03.Models
             ImmagineCopertina = mainimg;
             AltreImg1 = img1;
             AltreImg2 = img2;
+            Disponibile = disponibile;
         }
     }
 }
