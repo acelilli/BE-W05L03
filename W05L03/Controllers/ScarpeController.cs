@@ -198,7 +198,48 @@ namespace W05L03.Controllers
             }
             return View(scarpa);
         }
+        /////////////////////////////////////////
+        //METODI PER I DETTAGLI DELLE SCARPE
+        ////////////////////////////////////////
+        // GET: Scarpe/Details/5
+        public ActionResult DettagliScarpa(int id)
+        {
+            Scarpe scarpa = null;
+            string connectionString = ConfigurationManager.ConnectionStrings["ScarpeCo"].ConnectionString.ToString();
 
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Scarpe WHERE IdProdotto = @IdProdotto";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdProdotto", id);
 
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    scarpa = new Scarpe()
+                    {
+                        IdProdotto = (int)reader["IdProdotto"],
+                        NomeProdotto = reader["NomeProdotto"].ToString(),
+                        Prezzo = Convert.ToDecimal(reader["Prezzo"]),
+                        DescrizioneDettagliata = reader["DescrizioneDettagliata"].ToString(),
+                        ImmagineCopertina = reader["ImmagineCopertina"].ToString(),
+                        AltreImg1 = reader["AltreImg1"].ToString(),
+                        AltreImg2 = reader["AltreImg2"].ToString(),
+                        Disponibile = Convert.ToBoolean(reader["Disponibile"])
+                    };
+                }
+
+                reader.Close();
+            }
+
+            if (scarpa == null)
+            {
+                return HttpNotFound(); // Restituisci 404 se la scarpa non è trovata
+            }
+
+            return View(scarpa);
+        }
     }
 }

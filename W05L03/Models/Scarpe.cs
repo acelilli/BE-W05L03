@@ -9,6 +9,7 @@ namespace W05L03.Models
     public class Scarpe
     {
         public int IdProdotto { get; set; }
+        [Display(Name = "Nome modello:")]
         public string NomeProdotto { get; set; }
 
         // roba del prezzo per farlo decimale bene:
