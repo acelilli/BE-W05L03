@@ -23,8 +23,7 @@ namespace W05L03.Controllers
             try
             {
                 connection.Open();
-
-                // Seleziono solo le scarpe in vetrina
+                // Seleziono solo le scarpe con disponibile true da mostrare
                 string query = "SELECT * FROM Scarpe WHERE Disponibile = 1";
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataReader reader = command.ExecuteReader();
