@@ -15,17 +15,17 @@ namespace W05L03.Controllers
         public ActionResult Index()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["ScarpeCo"].ConnectionString.ToString();
-            SqlConnection connection = new SqlConnection(connectionString);
+            SqlConnection conn = new SqlConnection(connectionString);
 
             // Creo una lista di Scarpe
             List<Scarpe> scarpeList = new List<Scarpe>();
 
             try
             {
-                connection.Open();
+                conn.Open();
                 // Seleziono solo le scarpe con disponibile true da mostrare
                 string query = "SELECT * FROM Scarpe WHERE Disponibile = 1";
-                SqlCommand command = new SqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, conn);
                 SqlDataReader reader = command.ExecuteReader();
 
                 // Ciclo while per leggere i dati dal database
@@ -51,7 +51,7 @@ namespace W05L03.Controllers
             }
             finally
             {
-                connection.Close();
+                conn.Close();
             }
 
             // Restituisco la vista con la lista di scarpe

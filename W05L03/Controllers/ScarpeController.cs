@@ -30,7 +30,6 @@ namespace W05L03.Controllers
                 {
                     Scarpe scarpa = new Scarpe()
                     {
-                        IdProdotto = Convert.ToInt32(reader["IdProdotto"]),
                         NomeProdotto = reader["NomeProdotto"].ToString(),
                         Prezzo = Convert.ToDecimal(reader["Prezzo"]),
                         DescrizioneDettagliata = reader["DescrizioneDettagliata"].ToString(),
@@ -71,33 +70,11 @@ namespace W05L03.Controllers
             {
                 conn.Open();
 
-                // Salvataggio delle immagini sul server
-                string immagineCopertinaPath = "";
-                if (ImmagineCopertina.ContentLength > 0)
-                {
-                    string _File = Path.GetFileName(ImmagineCopertina.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _File);
-                    ImmagineCopertina.SaveAs(_path);
-                    immagineCopertinaPath = "~/UploadedFiles/" + _File;
-                }
+                // Salvataggio delle immagini sul server -> metodo separato SaveImage sotto
+                string immagineCopertinaPath = SaveImage(ImmagineCopertina);
+                string altreImg1path = SaveImage(AltreImg1);
+                string altreImg2path = SaveImage(AltreImg2);
 
-                string altreImg1path = "";
-                if (AltreImg1.ContentLength > 0)
-                {
-                    string _File = Path.GetFileName(AltreImg1.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _File);
-                    AltreImg1.SaveAs(_path);
-                    altreImg1path = "~/UploadedFiles/" + _File;
-                }
-
-                string altreImg2path = "";
-                if (AltreImg2.ContentLength > 0)
-                {
-                    var _File = Path.GetFileName(AltreImg2.FileName);
-                    var _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _File);
-                    AltreImg2.SaveAs(_path);
-                    altreImg2path = "~/UploadedFiles/" + _File;
-                }
 
                 // Inserimento dei dati nel database
                 string query = "INSERT INTO Scarpe (NomeProdotto, Prezzo, DescrizioneDettagliata, ImmagineCopertina, AltreImg1, AltreImg2, Disponibile) " +
@@ -124,6 +101,19 @@ namespace W05L03.Controllers
             }
 
             return View("CreateScarpe");
+        }
+
+        // Metodo per salvare un'immagine sul server e restituire il percorso del file
+        private string SaveImage(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(file.FileName);
+                string filePath = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                file.SaveAs(filePath);
+                return "~/UploadedFiles/" + fileName;
+            }
+            return null;
         }
     }
 }

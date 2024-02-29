@@ -10,7 +10,13 @@ namespace W05L03.Models
     {
         public int IdProdotto { get; set; }
         public string NomeProdotto { get; set; }
+
+        // roba del prezzo per farlo decimale bene:
+        [Required(ErrorMessage = "Il prezzo dell'articolo è obbligatorio.")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
         public decimal Prezzo { get; set; }
+
         [Display(Name = "Descrizione dettagliata:")]
         public string DescrizioneDettagliata { get; set; }
 
